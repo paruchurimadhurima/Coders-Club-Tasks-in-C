@@ -6,28 +6,21 @@ typedef struct node
     void *data;
     struct node *next;
 } node;
-struct node *head = NULL;
-struct node *tail = NULL;
-void insert(node **head, node **tail, const void * pointer, size_t size)
+typedef struct note
 {
-    if (*head == NULL)
-    {
-        *head = malloc(sizeof(node));
-        (*head)->data = malloc(size);
-        memcpy((*head)->data, pointer, size);
-        (*head)->next = NULL;
-        *tail = *head;
-    }
-    else
-    {
-        node *temp;
-        temp = malloc(sizeof(node));
-        temp->data = malloc(size);
-        memcpy(temp->data, pointer, size);
-        temp->next = *tail;
-        (*tail) = temp;
+    struct node *head ;
+    struct node *tail ;
+} note;
  
-    }
+void insert(node **tail, const void * pointer, size_t size)
+{
+    node *temp;
+    temp = malloc(sizeof(node));
+    temp->data = malloc(size);
+    memcpy(temp->data, pointer, size);
+    temp->next = *tail;
+    *tail = temp;
+ 
 }
 void display_int(node *tail)
 {
@@ -39,7 +32,7 @@ void display_float(node *tail)
 }
 void display(void(*display_datatype)(node *tail), node *tail)
 {
-    if (head == NULL)
+    if (tail == NULL)
         printf("List is empty\n");
     else
     {
@@ -50,24 +43,32 @@ void display(void(*display_datatype)(node *tail), node *tail)
         }
     }
 }
+ 
 int main()
 {
+    note note;
+    note.head=NULL;
+    note.tail=NULL;
     int intnum = 0;
     int i;
     for (i = 0; i<10; i++)
     {
         intnum++;
-        insert(&head, &tail, (const void *)&intnum, sizeof(intnum));
+        insert(&note.tail, (const void *)&intnum, sizeof(intnum));
+        if( note.head==NULL)
+            note.head= note.tail;
     }
-    display(display_int, tail);
+    display(display_int, note.tail);
     double floatnum = 0.101;
-    tail = NULL, head = NULL;
+    note.tail = NULL, note.head = NULL;
     for (i = 0; i<10; i++)
     {
         floatnum++;
-        insert(&head, &tail, (const void *)&floatnum, sizeof(floatnum));
+        insert(&note.tail, (const void *)&floatnum, sizeof(floatnum));
+        if( note.head==NULL)
+            note.head= note.tail;
     }
-    display(display_float, tail);
+    display(display_float, note.tail);
     printf("Succeed\n");
     return 0;
 }
